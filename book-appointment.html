@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MediLink – Book Appointment</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="nav-brand" id="nav-brand">
+      <span class="brand-icon">🏥</span> MediLink
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="doctor-search.html" class="nav-link">Find Doctors</a>
+      <a href="patient-dashboard.html" class="nav-link">My Appointments</a>
+      <a href="login.html" class="btn btn-outline btn-sm" id="nav-auth-btn">Login</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container booking-page-container">
+  <div class="page-header text-center">
+    <h1 class="page-title">Book an Appointment</h1>
+    <p class="page-subtitle">Select consultation type, choose a date & time slot</p>
+  </div>
+
+  <div class="booking-grid">
+    <!-- Doctor Summary Card -->
+    <div class="booking-sidebar">
+      <div class="card glass doc-summary-card">
+        <h3>Doctor Details</h3>
+        <div class="doc-summary-header">
+          <div class="doc-avatar-large" id="doc-avatar">👨‍⚕️</div>
+          <div>
+            <h4 id="doc-name">Dr. Rohan Mehta</h4>
+            <span class="badge badge-specialty" id="doc-specialty">Cardiology</span>
+            <p id="doc-hospital" class="text-muted">City Heart Center, Mumbai</p>
+          </div>
+        </div>
+        <hr class="divider"/>
+        <div class="summary-details">
+          <div class="summary-row">
+            <span>Experience:</span>
+            <strong id="doc-exp">12 years</strong>
+          </div>
+          <div class="summary-row">
+            <span>Rating:</span>
+            <strong id="doc-rating">★ 4.9</strong>
+          </div>
+          <div class="summary-row">
+            <span>Consultation Fee:</span>
+            <strong id="doc-fee" class="price-highlight">₹800</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Booking Form -->
+    <div class="booking-main">
+      <div class="card glass">
+        <div id="booking-alert" class="alert d-none"></div>
+
+        <form id="booking-form" novalidate>
+          <div class="form-group">
+            <label class="form-label">Consultation Mode</label>
+            <div class="mode-selector">
+              <label class="mode-option">
+                <input type="radio" name="consultation-type" value="In-Person" checked id="mode-in-person"/>
+                <span class="mode-box">🏥 In-Person Visit</span>
+              </label>
+              <label class="mode-option">
+                <input type="radio" name="consultation-type" value="Video Call" id="mode-video"/>
+                <span class="mode-box">💻 Video Consultation</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label for="patient-name">Patient Full Name</label>
+              <input type="text" id="patient-name" class="form-control" placeholder="Enter patient name" required/>
+              <div id="name-error" class="field-error"></div>
+            </div>
+
+            <div class="form-group flex-1">
+              <label for="patient-email">Patient Email</label>
+              <input type="email" id="patient-email" class="form-control" placeholder="Enter email address" required/>
+              <div id="email-error" class="field-error"></div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label for="appointment-date">Preferred Date</label>
+              <input type="date" id="appointment-date" class="form-control" required/>
+              <div id="date-error" class="field-error"></div>
+            </div>
+
+            <div class="form-group flex-1">
+              <label for="slot-select">Available Time Slot</label>
+              <select id="slot-select" class="form-control" required>
+                <option value="">-- Choose Time Slot --</option>
+              </select>
+              <div id="slot-error" class="field-error"></div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="symptoms-input">Reason for Visit / Symptoms (Optional)</label>
+            <textarea id="symptoms-input" class="form-control" rows="3" placeholder="Briefly describe health concerns..."></textarea>
+          </div>
+
+          <div class="fee-breakdown glass">
+            <div class="breakdown-row">
+              <span>Doctor Consultation Fee</span>
+              <span id="fee-item">₹800</span>
+            </div>
+            <div class="breakdown-row">
+              <span>Platform & Service Fee</span>
+              <span>₹50</span>
+            </div>
+            <div class="breakdown-row total">
+              <strong>Total Payable</strong>
+              <strong id="fee-total">₹850</strong>
+            </div>
+          </div>
+
+          <button type="submit" id="confirm-booking-btn" class="btn btn-primary btn-full btn-lg">
+            Confirm & Book Appointment
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const docId = params.get('doctorId') || 'doc-1';
+  const doctor = MediLink.getDoctorById(docId) || MediLink.getDoctors()[0];
+
+  // Prefill Doctor Details
+  document.getElementById('doc-name').innerText = doctor.name;
+  document.getElementById('doc-specialty').innerText = doctor.specialty;
+  document.getElementById('doc-hospital').innerText = doctor.hospital + ', ' + doctor.city;
+  document.getElementById('doc-exp').innerText = doctor.experience;
+  document.getElementById('doc-rating').innerText = '★ ' + doctor.rating;
+  document.getElementById('doc-fee').innerText = '₹' + doctor.fee;
+  document.getElementById('doc-avatar').innerText = doctor.avatar || '👨‍⚕️';
+  document.getElementById('fee-item').innerText = '₹' + doctor.fee;
+  document.getElementById('fee-total').innerText = '₹' + (doctor.fee + 50);
+
+  // Populate Slots
+  const slotSelect = document.getElementById('slot-select');
+  doctor.slots.forEach(s => {
+    const opt = document.createElement('option');
+    opt.value = s;
+    opt.innerText = s;
+    slotSelect.appendChild(opt);
+  });
+
+  // Set min date to today
+  const today = new Date().toISOString().split('T')[0];
+  const dateInput = document.getElementById('appointment-date');
+  dateInput.min = today;
+  dateInput.value = today;
+
+  // Prefill Patient if Logged In
+  const activeUser = MediLink.getCurrentUser();
+  if (activeUser) {
+    document.getElementById('patient-name').value = activeUser.name;
+    document.getElementById('patient-email').value = activeUser.email;
+  }
+
+  // Handle Form Submission
+  const form = document.getElementById('booking-form');
+  const alertBox = document.getElementById('booking-alert');
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    alertBox.className = 'alert d-none';
+    alertBox.innerText = '';
+    ['name', 'email', 'date', 'slot'].forEach(id => {
+      const err = document.getElementById(id + '-error');
+      if (err) err.innerText = '';
+    });
+
+    const name = document.getElementById('patient-name').value.trim();
+    const email = document.getElementById('patient-email').value.trim();
+    const date = dateInput.value;
+    const slot = slotSelect.value;
+    const mode = document.querySelector('input[name="consultation-type"]:checked').value;
+    const symptoms = document.getElementById('symptoms-input').value.trim();
+
+    let hasError = false;
+    if (!name) {
+      document.getElementById('name-error').innerText = 'Patient name is required.';
+      hasError = true;
+    }
+    if (!email || !email.includes('@')) {
+      document.getElementById('email-error').innerText = 'Valid patient email is required.';
+      hasError = true;
+    }
+    if (!date) {
+      document.getElementById('date-error').innerText = 'Please select a date.';
+      hasError = true;
+    }
+    if (!slot) {
+      document.getElementById('slot-error').innerText = 'Please select a time slot.';
+      hasError = true;
+    }
+
+    if (hasError) return;
+
+    const apt = MediLink.bookAppointment({
+      patientEmail: email,
+      patientName: name,
+      doctorId: doctor.id,
+      doctorName: doctor.name,
+      specialty: doctor.specialty,
+      hospital: doctor.hospital,
+      date: date,
+      time: slot,
+      type: mode,
+      fee: doctor.fee + 50,
+      symptoms: symptoms
+    });
+
+    alertBox.className = 'alert alert-success';
+    alertBox.innerText = 'Appointment booked successfully! Redirecting to receipt...';
+    setTimeout(() => {
+      window.location.href = 'receipt.html?appointmentId=' + apt.id;
+    }, 800);
+  });
+</script>
+</body>
+</html>

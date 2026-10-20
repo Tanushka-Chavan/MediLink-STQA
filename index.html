@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="MediLink – Doctor Appointment & Healthcare Management System"/>
+  <title>MediLink – Healthcare Management</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<!-- NAV -->
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="nav-brand" id="nav-brand" data-testid="nav-brand">
+      <span class="brand-icon">🏥</span> MediLink
+    </a>
+    <div class="nav-links" id="nav-links">
+      <a href="doctor-search.html" class="nav-link" data-testid="nav-search">Find Doctors</a>
+      <a href="#services" class="nav-link">Services</a>
+      <a href="#about" class="nav-link">About</a>
+      <a href="login.html" class="btn btn-outline btn-sm" data-testid="nav-login">Login</a>
+      <a href="register.html" class="btn btn-primary btn-sm" data-testid="nav-register">Sign Up</a>
+    </div>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation">☰</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-bg">
+    <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge" data-testid="hero-badge">🌟 Trusted by 50,000+ patients</div>
+    <h1 class="hero-title">Your Health,<br/><span class="gradient-text">Our Priority</span></h1>
+    <p class="hero-subtitle">Book appointments with top doctors, manage your health records, and stay on top of your wellness — all in one place.</p>
+    <div class="hero-actions">
+      <a href="doctor-search.html" class="btn btn-primary btn-lg" data-testid="hero-find-doctor">Find a Doctor</a>
+      <a href="register.html" class="btn btn-ghost btn-lg" data-testid="hero-signup">Get Started Free</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num">500+</span><span class="stat-label">Doctors</span></div>
+      <div class="stat"><span class="stat-num">50K+</span><span class="stat-label">Patients</span></div>
+      <div class="stat"><span class="stat-num">30+</span><span class="stat-label">Specialties</span></div>
+      <div class="stat"><span class="stat-num">4.8★</span><span class="stat-label">Rating</span></div>
+    </div>
+  </div>
+  <div class="hero-image">
+    <div class="hero-card glass">
+      <div class="doctor-mini">
+        <div class="doctor-avatar">👨‍⚕️</div>
+        <div>
+          <div class="doctor-mini-name">Dr. Rohan Mehta</div>
+          <div class="doctor-mini-spec">Cardiologist</div>
+        </div>
+        <span class="available-badge">Available</span>
+      </div>
+      <div class="slot-preview">
+        <span class="slot active-slot">10:00 AM</span>
+        <span class="slot">11:00 AM</span>
+        <span class="slot active-slot">2:00 PM</span>
+        <span class="slot">4:00 PM</span>
+      </div>
+      <a href="register.html" class="btn btn-primary btn-full" data-testid="card-book-btn">Book Appointment</a>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="container">
+    <h2 class="section-title">What We Offer</h2>
+    <p class="section-subtitle">Everything you need for seamless healthcare management</p>
+    <div class="services-grid">
+      <div class="service-card glass">
+        <div class="service-icon">🔍</div>
+        <h3>Doctor Search</h3>
+        <p>Find specialists by name, specialty, hospital, or city in seconds.</p>
+      </div>
+      <div class="service-card glass">
+        <div class="service-icon">📅</div>
+        <h3>Easy Booking</h3>
+        <p>Book in-person or video consultations with real-time slot availability.</p>
+      </div>
+      <div class="service-card glass">
+        <div class="service-icon">📋</div>
+        <h3>Medical Locker</h3>
+        <p>Securely store and access your prescriptions and lab reports anytime.</p>
+      </div>
+      <div class="service-card glass">
+        <div class="service-icon">💊</div>
+        <h3>Prescriptions</h3>
+        <p>View digital prescriptions from your consultations instantly.</p>
+      </div>
+      <div class="service-card glass">
+        <div class="service-icon">🏃</div>
+        <h3>Wellness Tracker</h3>
+        <p>Track daily health habits and monitor your BMI progress.</p>
+      </div>
+      <div class="service-card glass">
+        <div class="service-icon">🔔</div>
+        <h3>Notifications</h3>
+        <p>Get timely reminders and updates about your appointments.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="container about-grid">
+    <div class="about-text">
+      <h2 class="section-title">About MediLink</h2>
+      <p>MediLink bridges the gap between patients and healthcare providers. Our platform makes it easy to find the right doctor, book an appointment, and manage your entire health journey digitally.</p>
+      <ul class="about-list">
+        <li>✅ Verified doctors across 30+ specialties</li>
+        <li>✅ In-person and video consultations</li>
+        <li>✅ Secure digital medical records</li>
+        <li>✅ 24/7 appointment booking</li>
+      </ul>
+      <a href="register.html" class="btn btn-primary" data-testid="about-signup">Join MediLink</a>
+    </div>
+    <div class="about-visual">
+      <div class="about-card glass">
+        <div class="about-item"><span>👨‍⚕️</span><span>500+ Verified Doctors</span></div>
+        <div class="about-item"><span>🏥</span><span>100+ Hospitals</span></div>
+        <div class="about-item"><span>🌆</span><span>20+ Cities</span></div>
+        <div class="about-item"><span>⭐</span><span>4.8/5 Patient Rating</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container footer-grid">
+    <div>
+      <div class="footer-brand">🏥 MediLink</div>
+      <p class="footer-desc">Your trusted healthcare companion.</p>
+    </div>
+    <div>
+      <h4>Quick Links</h4>
+      <a href="doctor-search.html">Find Doctors</a>
+      <a href="login.html">Patient Login</a>
+      <a href="register.html">Register</a>
+    </div>
+    <div>
+      <h4>Demo Credentials</h4>
+      <p>Patient: patient@demo.com / demo123</p>
+      <p>Doctor: doctor@demo.com / demo123</p>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2026 MediLink. STQA Demo Project.</div>
+</footer>
+
+<script src="app.js"></script>
+<script>
+  document.getElementById('nav-toggle').addEventListener('click', () => {
+    document.getElementById('nav-links').classList.toggle('open');
+  });
+</script>
+</body>
+</html>

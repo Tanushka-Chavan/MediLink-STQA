@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MediLink – Patient Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body class="dashboard-body">
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="nav-brand" id="nav-brand">
+      <span class="brand-icon">🏥</span> MediLink
+    </a>
+    <div class="nav-links">
+      <a href="doctor-search.html" class="nav-link" id="nav-book-more">Book New</a>
+      <a href="patient-dashboard.html" class="nav-link active">My Dashboard</a>
+      <button class="btn btn-outline btn-sm" id="logout-btn">Sign Out</button>
+    </div>
+  </div>
+</nav>
+
+<div class="container dashboard-container">
+  <div class="dashboard-header flex-between">
+    <div>
+      <h1 class="page-title" id="welcome-title">Patient Portal</h1>
+      <p class="page-subtitle" id="welcome-subtitle">Welcome back! Manage your consultations and medical records</p>
+    </div>
+    <a href="doctor-search.html" class="btn btn-primary" id="btn-quick-book">+ Book New Appointment</a>
+  </div>
+
+  <div id="dashboard-alert" class="alert d-none"></div>
+
+  <!-- Stats Grid -->
+  <div class="stats-grid">
+    <div class="stat-card glass">
+      <div class="stat-icon">📅</div>
+      <div>
+        <div class="stat-value" id="stat-total">2</div>
+        <div class="stat-title">Total Appointments</div>
+      </div>
+    </div>
+    <div class="stat-card glass">
+      <div class="stat-icon">⏳</div>
+      <div>
+        <div class="stat-value" id="stat-upcoming">2</div>
+        <div class="stat-title">Upcoming Visits</div>
+      </div>
+    </div>
+    <div class="stat-card glass">
+      <div class="stat-icon">💊</div>
+      <div>
+        <div class="stat-value" id="stat-prescriptions">3</div>
+        <div class="stat-title">Prescriptions</div>
+      </div>
+    </div>
+    <div class="stat-card glass">
+      <div class="stat-icon">📋</div>
+      <div>
+        <div class="stat-value" id="stat-reports">1</div>
+        <div class="stat-title">Lab Reports</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Appointments Section -->
+  <div class="card glass dashboard-section">
+    <div class="section-top flex-between">
+      <h2>My Appointments</h2>
+      <div class="table-actions">
+        <input type="text" id="appointment-search" class="form-control form-control-sm" placeholder="Search by doctor or ID..."/>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table" id="appointments-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Doctor</th>
+            <th>Specialty</th>
+            <th>Date & Time</th>
+            <th>Type</th>
+            <th>Fee</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="appointments-tbody">
+          <!-- Dynamically populated -->
+        </tbody>
+      </table>
+    </div>
+    <div id="no-appointments-msg" class="empty-state d-none">
+      <p>No appointments found. Book your first consultation today!</p>
+    </div>
+  </div>
+
+  <!-- Medical Locker & Records Section -->
+  <div class="card glass dashboard-section">
+    <h2>Medical Locker & Digital Records</h2>
+    <div class="records-grid">
+      <div class="record-item glass">
+        <div class="record-icon">📄</div>
+        <div class="record-details">
+          <h4>Cardiology ECG Report</h4>
+          <p class="text-muted">City Heart Center • 15 Oct 2026</p>
+        </div>
+        <button class="btn btn-ghost btn-sm" id="view-report-btn">View</button>
+      </div>
+      <div class="record-item glass">
+        <div class="record-icon">💊</div>
+        <div class="record-details">
+          <h4>Dermatology Prescription</h4>
+          <p class="text-muted">Dr. Ananya Sharma • 02 Oct 2026</p>
+        </div>
+        <button class="btn btn-ghost btn-sm" id="view-rx-btn">View</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+  const user = MediLink.getCurrentUser() || { name: 'John Doe', email: 'patient@demo.com' };
+  document.getElementById('welcome-title').innerText = 'Welcome, ' + user.name;
+
+  document.getElementById('logout-btn').addEventListener('click', () => {
+    MediLink.logout();
+  });
+
+  const alertBox = document.getElementById('dashboard-alert');
+  const tbody = document.getElementById('appointments-tbody');
+  const emptyMsg = document.getElementById('no-appointments-msg');
+  const searchInput = document.getElementById('appointment-search');
+
+  function renderAppointments() {
+    let appointments = MediLink.getAppointments();
+    const query = searchInput.value.toLowerCase().trim();
+
+    if (query) {
+      appointments = appointments.filter(a =>
+        a.id.toLowerCase().includes(query) ||
+        (a.doctorName && a.doctorName.toLowerCase().includes(query)) ||
+        (a.specialty && a.specialty.toLowerCase().includes(query))
+      );
+    }
+
+    const total = appointments.length;
+    const upcoming = appointments.filter(a => a.status === 'Confirmed').length;
+    document.getElementById('stat-total').innerText = total;
+    document.getElementById('stat-upcoming').innerText = upcoming;
+
+    if (appointments.length === 0) {
+      tbody.innerHTML = '';
+      emptyMsg.classList.remove('d-none');
+      return;
+    }
+
+    emptyMsg.classList.add('d-none');
+    tbody.innerHTML = appointments.map(a => `
+      <tr id="row-${a.id}">
+        <td><strong>${a.id}</strong></td>
+        <td>${a.doctorName || 'Dr. Specialist'}</td>
+        <td><span class="badge badge-specialty">${a.specialty || 'General'}</span></td>
+        <td>${a.date} at ${a.time}</td>
+        <td>${a.type || 'In-Person'}</td>
+        <td>₹${a.fee || 800}</td>
+        <td><span class="badge badge-${a.status === 'Confirmed' ? 'success' : a.status === 'Cancelled' ? 'danger' : 'info'}" id="status-${a.id}">${a.status}</span></td>
+        <td>
+          ${a.status === 'Confirmed' ? `
+            <button class="btn btn-danger btn-sm cancel-btn" data-apt-id="${a.id}" id="cancel-btn-${a.id}">
+              Cancel
+            </button>
+          ` : `<span class="text-muted">No Action</span>`}
+        </td>
+      </tr>
+    `).join('');
+
+    // Attach cancel listeners
+    document.querySelectorAll('.cancel-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-apt-id');
+        if (confirm('Are you sure you want to cancel appointment ' + id + '?')) {
+          const res = MediLink.cancelAppointment(id);
+          if (res.success) {
+            alertBox.className = 'alert alert-success';
+            alertBox.innerText = 'Appointment ' + id + ' cancelled successfully.';
+            renderAppointments();
+          }
+        }
+      });
+    });
+  }
+
+  searchInput.addEventListener('keyup', renderAppointments);
+  renderAppointments();
+</script>
+</body>
+</html>

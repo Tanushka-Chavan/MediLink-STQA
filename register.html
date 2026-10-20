@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MediLink – Patient Registration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body class="auth-body">
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="nav-brand" id="nav-brand">
+      <span class="brand-icon">🏥</span> MediLink
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="doctor-search.html" class="nav-link">Find Doctors</a>
+      <a href="login.html" class="btn btn-outline btn-sm">Login</a>
+    </div>
+  </div>
+</nav>
+
+<div class="auth-container">
+  <div class="auth-card glass register-card">
+    <div class="auth-header">
+      <div class="brand-icon large">🩺</div>
+      <h2 id="register-title">Create MediLink Account</h2>
+      <p class="auth-subtitle">Join thousands of patients managing their health easily</p>
+    </div>
+
+    <div id="reg-alert-box" class="alert d-none" role="alert"></div>
+
+    <form id="register-form" novalidate>
+      <div class="form-row">
+        <div class="form-group flex-1">
+          <label for="reg-name">Full Name</label>
+          <input type="text" id="reg-name" class="form-control" placeholder="John Doe" required/>
+          <div id="name-error" class="field-error"></div>
+        </div>
+
+        <div class="form-group flex-1">
+          <label for="reg-email">Email Address</label>
+          <input type="email" id="reg-email" class="form-control" placeholder="john@example.com" required/>
+          <div id="email-error" class="field-error"></div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group flex-1">
+          <label for="reg-phone">Phone Number</label>
+          <input type="tel" id="reg-phone" class="form-control" placeholder="9876543210" required/>
+          <div id="phone-error" class="field-error"></div>
+        </div>
+
+        <div class="form-group flex-1">
+          <label for="reg-age">Age</label>
+          <input type="number" id="reg-age" class="form-control" placeholder="25" min="1" max="120" required/>
+          <div id="age-error" class="field-error"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="reg-gender">Gender</label>
+        <select id="reg-gender" class="form-control">
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group flex-1">
+          <label for="reg-password">Password</label>
+          <input type="password" id="reg-password" class="form-control" placeholder="Min 6 characters" required/>
+          <div id="password-error" class="field-error"></div>
+        </div>
+
+        <div class="form-group flex-1">
+          <label for="reg-confirm-password">Confirm Password</label>
+          <input type="password" id="reg-confirm-password" class="form-control" placeholder="Re-enter password" required/>
+          <div id="confirm-password-error" class="field-error"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="terms-label">
+          <input type="checkbox" id="terms-chk" required/>
+          <span>I agree to the <a href="#">Terms of Service</a> & <a href="#">Privacy Policy</a></span>
+        </label>
+        <div id="terms-error" class="field-error"></div>
+      </div>
+
+      <button type="submit" id="register-btn" class="btn btn-primary btn-full">
+        Create Patient Account
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      <p>Already have an account? <a href="login.html" id="link-login">Sign In</a></p>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+  const form = document.getElementById('register-form');
+  const alertBox = document.getElementById('reg-alert-box');
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    alertBox.className = 'alert d-none';
+    alertBox.innerText = '';
+    ['name', 'email', 'phone', 'age', 'password', 'confirm-password', 'terms'].forEach(f => {
+      const err = document.getElementById(f + '-error');
+      if (err) err.innerText = '';
+    });
+
+    const name = document.getElementById('reg-name').value.trim();
+    const email = document.getElementById('reg-email').value.trim();
+    const phone = document.getElementById('reg-phone').value.trim();
+    const age = document.getElementById('reg-age').value.trim();
+    const gender = document.getElementById('reg-gender').value;
+    const password = document.getElementById('reg-password').value;
+    const confirmPassword = document.getElementById('reg-confirm-password').value;
+    const terms = document.getElementById('terms-chk').checked;
+
+    let hasError = false;
+
+    if (!name) {
+      document.getElementById('name-error').innerText = 'Full name is required.';
+      hasError = true;
+    }
+
+    if (!email) {
+      document.getElementById('email-error').innerText = 'Email is required.';
+      hasError = true;
+    } else if (!email.includes('@') || !email.includes('.')) {
+      document.getElementById('email-error').innerText = 'Please enter a valid email.';
+      hasError = true;
+    }
+
+    if (!phone) {
+      document.getElementById('phone-error').innerText = 'Phone number is required.';
+      hasError = true;
+    } else if (phone.length < 10) {
+      document.getElementById('phone-error').innerText = 'Phone number must be at least 10 digits.';
+      hasError = true;
+    }
+
+    if (!age || parseInt(age) < 1) {
+      document.getElementById('age-error').innerText = 'Please provide a valid age.';
+      hasError = true;
+    }
+
+    if (!password) {
+      document.getElementById('password-error').innerText = 'Password is required.';
+      hasError = true;
+    } else if (password.length < 6) {
+      document.getElementById('password-error').innerText = 'Password must be at least 6 characters.';
+      hasError = true;
+    }
+
+    if (password !== confirmPassword) {
+      document.getElementById('confirm-password-error').innerText = 'Passwords do not match.';
+      hasError = true;
+    }
+
+    if (!terms) {
+      document.getElementById('terms-error').innerText = 'You must agree to the terms.';
+      hasError = true;
+    }
+
+    if (hasError) return;
+
+    const res = MediLink.registerUser({
+      name, email, phone, age, gender, password, role: 'patient'
+    });
+
+    if (!res.success) {
+      alertBox.className = 'alert alert-danger';
+      alertBox.innerText = res.message;
+      return;
+    }
+
+    alertBox.className = 'alert alert-success';
+    alertBox.innerText = 'Registration successful! Redirecting to login...';
+    setTimeout(() => {
+      window.location.href = 'login.html';
+    }, 1000);
+  });
+</script>
+</body>
+</html>

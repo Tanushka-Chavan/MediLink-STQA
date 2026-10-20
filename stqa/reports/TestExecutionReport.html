@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MediLink STQA Test Execution Report</title>
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #f8fafc; padding: 2rem; }
+    h1 { color: #38bdf8; }
+    .summary-card { background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; display: flex; gap: 2rem; border: 1px solid rgba(255,255,255,0.1); }
+    .stat { font-size: 1.2rem; }
+    .stat strong { font-size: 2rem; display: block; }
+    .pass { color: #4ade80; }
+    .fail { color: #f87171; }
+    table { width: 100%; border-collapse: collapse; background: rgba(255,255,255,0.02); }
+    th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    th { background: rgba(255,255,255,0.08); color: #94a3b8; font-size: 0.85rem; text-transform: uppercase; }
+    .badge { padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 0.8rem; }
+    .badge-pass { background: rgba(34,197,94,0.2); color: #86efac; }
+    .badge-fail { background: rgba(239,68,68,0.2); color: #fca5a5; }
+  </style>
+</head>
+<body>
+  <h1>MediLink STQA Test Execution Report</h1>
+  <p>Automated Selenium WebDriver Suite • 50 Test Cases</p>
+  <div class="summary-card">
+    <div class="stat">Total Cases: <strong>50</strong></div>
+    <div class="stat pass">Passed: <strong>40</strong></div>
+    <div class="stat fail">Failed (Defects): <strong>10</strong></div>
+    <div class="stat pass">Pass Rate: <strong>80.0%</strong></div>
+  </div>
+  <table>
+    <tr><th>ID</th><th>Test Scenario / Objective</th><th>Status</th><th>Notes / Defect Log</th></tr>
+    <tr><td><strong>TC01</strong></td><td>Verify Landing Page Title</td><td><span class='badge badge-pass'>PASS</span></td><td>Executed as expected</td></tr>
+    <tr><td><strong>TC02</strong></td><td>Verify Nav Brand Logo</td><td><span class='badge badge-pass'>PASS</span></td><td>Executed as expected</td></tr>
+    <tr><td><strong>TC03</strong></td><td>Verify Hero CTA Button</td><td><span class='badge badge-pass'>PASS</span></td><td>Executed as expected</td></tr>
+    <tr><td><strong>TC04</strong></td><td>Verify Services Grid Count</td><td><span class='badge badge-pass'>PASS</span></td><td>Executed as expected</td></tr>
+    <tr><td><strong>TC05</strong></td><td>Verify Navigation Menu Items</td><td><span class='badge badge-pass'>PASS</span></td><td>Executed as expected</td></tr>
+    <tr><td><strong>TC06</strong></td><td>Verify Footer Demo Credentials</td><td><span class='badge badge-pass'>PASS</span></td><td>Executed as expected</td></tr>
+    <tr><td><strong>TC07</strong></td><td>Verify 24/7 Hotline Element (Defect #1)</td><td><span class='badge badge-fail'>FAIL</span></td><td>Message: no such element: Unable to locate element: {"method</td></tr>
+    <tr><td><strong>TC08</strong></td><td>Verify Registration Page Render</td><td><span class='badge badge-pass'>PASS</span></td><td>Executed as expected</td></tr>
+    <tr><td><strong>TC09</strong></td><td>Register With Valid Details</td><td><span class='badge badge-pass'>PASS</span></td><td>Executed as expected</td></tr>
+    <tr><td><strong>TC10</strong></td><td>Register Empty Name Validation</td><td><span class='badge badge-pass'>PASS</span></td><td>Executed as expected</td></tr>
+    <tr><td><strong>TC11</strong></td><td>Register Malformed Email Validation</td><td><span class='badge badge-pass'>PASS</span></td><td>Executed as expected</td></tr>
+    <tr><td><strong>TC12</strong></td><td>Register Short Password Validation</td><td><span class='badge badge-pass'>PASS</span></td><td>Executed as expected</td></tr>
+    <tr><td><strong>TC13</strong></td><td>Register Password Mismatch Error</td><td><span class='badge badge-pass'>PASS</span></td><td>Executed as expected</td></tr>
+    <tr><td><strong>TC14</strong></td><td>Strict Country Code Validator (Defect #2)</td><td><span class='badge badge-fail'>FAIL</span></td><td>Message: no such element: Unable to locate element: {"method</td></tr>
+    <tr><td><strong>TC15</strong></td><td>Guardian Infant Consent Box (Defect #3)</td><td><span class='badge badge-fail'>FAIL</span></td><td>Message: no such element: Unable to locate element: {"method</td></tr>
+    <tr><td><strong>TC16</strong></td><td>Verify Login Form Elements</td><td><span class='badge badge-pass'>PASS</span></td><td>Executed as expected</td></tr>
+    <tr><td><strong>TC17</strong></td><td>Valid Patient Login</td><td><span class='badge badge-pass'>PASS</span></td><td>Executed as expected</td></tr>
+    <tr><td><strong>TC18</strong></td><td>Valid Doctor Login</td><td><span class='badge badge-pass'>PASS</span></td><td>Executed as expected</td></tr>
+    <tr><td><strong>TC19</strong></td><td>Non-Existent User Login</td><td><span class='badge badge-pass'>PASS</span></td><td>Executed as expected</td></tr>
+    <tr><td><strong>TC20</strong></td><td>Wrong Password Rejection</td><td><span class='badge badge-pass'>PASS</span></td><td>Executed as expected</td></tr>
+    <tr><td><strong>TC21</strong></td><td>Quick Demo Patient Button</td><td><span class='badge badge-pass'>PASS</span></td><td>Executed as expected</td></tr>
+    <tr><td><strong>TC22</strong></td><td>Brute-force Lockout Timer (Defect #4)</td><td><span class='badge badge-fail'>FAIL</span></td><td>Message: no such element: Unable to locate element: {"method</td></tr>
+    <tr><td><strong>TC23</strong></td><td>reCAPTCHA Widget Presence (Defect #5)</td><td><span class='badge badge-fail'>FAIL</span></td><td>Message: no such element: Unable to locate element: {"method</td></tr>
+    <tr><td><strong>TC24</strong></td><td>Doctor Search Initial Load</td><td><span class='badge badge-pass'>PASS</span></td><td>Executed as expected</td></tr>
+    <tr><td><strong>TC25</strong></td><td>Search Doctor by Name Keyword</td><td><span class='badge badge-pass'>PASS</span></td><td>Executed as expected</td></tr>
+    <tr><td><strong>TC26</strong></td><td>Filter Doctors Cardiology</td><td><span class='badge badge-pass'>PASS</span></td><td>Executed as expected</td></tr>
+    <tr><td><strong>TC27</strong></td><td>Filter Doctors Dermatology</td><td><span class='badge badge-pass'>PASS</span></td><td>Executed as expected</td></tr>
+    <tr><td><strong>TC28</strong></td><td>Filter Doctors City Mumbai</td><td><span class='badge badge-pass'>PASS</span></td><td>Executed as expected</td></tr>
+    <tr><td><strong>TC29</strong></td><td>Search Unknown Keyword Empty State</td><td><span class='badge badge-pass'>PASS</span></td><td>Executed as expected</td></tr>
+    <tr><td><strong>TC30</strong></td><td>Reset Filters Action</td><td><span class='badge badge-pass'>PASS</span></td><td>Executed as expected</td></tr>
+    <tr><td><strong>TC31</strong></td><td>Hindi Script Transliteration (Defect #6)</td><td><span class='badge badge-fail'>FAIL</span></td><td>Transliteration match missing</td></tr>
+    <tr><td><strong>TC32</strong></td><td>Doctor Summary on Booking Page</td><td><span class='badge badge-pass'>PASS</span></td><td>Executed as expected</td></tr>
+    <tr><td><strong>TC33</strong></td><td>Consultation Mode Radio Toggle</td><td><span class='badge badge-pass'>PASS</span></td><td>Executed as expected</td></tr>
+    <tr><td><strong>TC34</strong></td><td>Available Slots Dropdown Populate</td><td><span class='badge badge-pass'>PASS</span></td><td>Executed as expected</td></tr>
+    <tr><td><strong>TC35</strong></td><td>Valid Appointment Booking Submission</td><td><span class='badge badge-pass'>PASS</span></td><td>Executed as expected</td></tr>
+    <tr><td><strong>TC36</strong></td><td>Booking Empty Slot Validation</td><td><span class='badge badge-pass'>PASS</span></td><td>Executed as expected</td></tr>
+    <tr><td><strong>TC37</strong></td><td>Redis Distributed Slot Lease (Defect #7)</td><td><span class='badge badge-fail'>FAIL</span></td><td>Message: no such element: Unable to locate element: {"method</td></tr>
+    <tr><td><strong>TC38</strong></td><td>NTP Server Clock Skew Check (Defect #8)</td><td><span class='badge badge-fail'>FAIL</span></td><td>Message: no such element: Unable to locate element: {"method</td></tr>
+    <tr><td><strong>TC39</strong></td><td>Receipt Appointment ID Badge</td><td><span class='badge badge-pass'>PASS</span></td><td>Executed as expected</td></tr>
+    <tr><td><strong>TC40</strong></td><td>Receipt Doctor Details</td><td><span class='badge badge-pass'>PASS</span></td><td>Executed as expected</td></tr>
+    <tr><td><strong>TC41</strong></td><td>Receipt Amount & Payment Status</td><td><span class='badge badge-pass'>PASS</span></td><td>Executed as expected</td></tr>
+    <tr><td><strong>TC42</strong></td><td>Receipt Dashboard Link Navigation</td><td><span class='badge badge-pass'>PASS</span></td><td>Executed as expected</td></tr>
+    <tr><td><strong>TC43</strong></td><td>Patient Dashboard Stats Counters</td><td><span class='badge badge-pass'>PASS</span></td><td>Executed as expected</td></tr>
+    <tr><td><strong>TC44</strong></td><td>Patient Appointments Table List</td><td><span class='badge badge-pass'>PASS</span></td><td>Executed as expected</td></tr>
+    <tr><td><strong>TC45</strong></td><td>Patient Dashboard Search Filter</td><td><span class='badge badge-pass'>PASS</span></td><td>Executed as expected</td></tr>
+    <tr><td><strong>TC46</strong></td><td>Cancel Appointment Action</td><td><span class='badge badge-pass'>PASS</span></td><td>Executed as expected</td></tr>
+    <tr><td><strong>TC47</strong></td><td>PKI Electronic Digital Signature (Defect #9)</td><td><span class='badge badge-fail'>FAIL</span></td><td>Message: no such element: Unable to locate element: {"method</td></tr>
+    <tr><td><strong>TC48</strong></td><td>Doctor Portal Patient Queue Loaded</td><td><span class='badge badge-pass'>PASS</span></td><td>Executed as expected</td></tr>
+    <tr><td><strong>TC49</strong></td><td>Doctor Complete Consultation Action</td><td><span class='badge badge-pass'>PASS</span></td><td>Executed as expected</td></tr>
+    <tr><td><strong>TC50</strong></td><td>WebRTC E2EE Video Session Expiry (Defect #10)</td><td><span class='badge badge-fail'>FAIL</span></td><td>Message: no such element: Unable to locate element: {"method</td></tr>
+  </table>
+</body>
+</html>

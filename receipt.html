@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MediLink – Appointment Receipt</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body class="receipt-body">
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="nav-brand" id="nav-brand">
+      <span class="brand-icon">🏥</span> MediLink
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="doctor-search.html" class="nav-link">Find Doctors</a>
+      <a href="patient-dashboard.html" class="btn btn-outline btn-sm">My Dashboard</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container receipt-container">
+  <div class="receipt-card glass" id="receipt-card">
+    <div class="receipt-header text-center">
+      <div class="success-icon-badge">✅</div>
+      <h2 id="receipt-heading">Appointment Confirmed!</h2>
+      <p class="text-muted">A confirmation email has been sent to your registered address.</p>
+      <div class="appointment-id-pill" id="apt-id-badge">APT-1001</div>
+    </div>
+
+    <div class="receipt-body-content">
+      <div class="receipt-section">
+        <h4 class="section-label">Patient Details</h4>
+        <div class="receipt-data-row">
+          <span>Patient Name:</span>
+          <strong id="receipt-patient-name">John Doe</strong>
+        </div>
+        <div class="receipt-data-row">
+          <span>Email:</span>
+          <span id="receipt-patient-email">patient@demo.com</span>
+        </div>
+      </div>
+
+      <div class="receipt-section">
+        <h4 class="section-label">Consultation Details</h4>
+        <div class="receipt-data-row">
+          <span>Doctor:</span>
+          <strong id="receipt-doctor-name">Dr. Rohan Mehta</strong>
+        </div>
+        <div class="receipt-data-row">
+          <span>Specialty:</span>
+          <span id="receipt-specialty">Cardiology</span>
+        </div>
+        <div class="receipt-data-row">
+          <span>Hospital / Clinic:</span>
+          <span id="receipt-hospital">City Heart Center</span>
+        </div>
+        <div class="receipt-data-row">
+          <span>Mode:</span>
+          <span class="badge badge-info" id="receipt-mode">In-Person</span>
+        </div>
+        <div class="receipt-data-row">
+          <span>Date & Time:</span>
+          <strong id="receipt-datetime">2026-10-25 at 10:30 AM</strong>
+        </div>
+      </div>
+
+      <div class="receipt-section payment-section">
+        <h4 class="section-label">Payment Summary</h4>
+        <div class="receipt-data-row">
+          <span>Status:</span>
+          <span class="badge badge-success" id="receipt-status">Paid / Confirmed</span>
+        </div>
+        <div class="receipt-data-row total-row">
+          <strong>Total Amount Paid:</strong>
+          <strong class="price-highlight" id="receipt-amount">₹850</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="receipt-actions">
+      <button class="btn btn-outline" id="print-btn" onclick="window.print()">🖨️ Print Receipt</button>
+      <a href="patient-dashboard.html" class="btn btn-primary" id="view-dashboard-btn">Go to Dashboard</a>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const aptId = params.get('appointmentId') || 'APT-1001';
+  const appointments = MediLink.getAppointments();
+  const apt = appointments.find(a => a.id === aptId) || appointments[0];
+
+  if (apt) {
+    document.getElementById('apt-id-badge').innerText = apt.id;
+    document.getElementById('receipt-patient-name').innerText = apt.patientName || 'John Doe';
+    document.getElementById('receipt-patient-email').innerText = apt.patientEmail || 'patient@demo.com';
+    document.getElementById('receipt-doctor-name').innerText = apt.doctorName || 'Dr. Rohan Mehta';
+    document.getElementById('receipt-specialty').innerText = apt.specialty || 'General';
+    document.getElementById('receipt-hospital').innerText = apt.hospital || 'MediLink Care';
+    document.getElementById('receipt-mode').innerText = apt.type || 'In-Person';
+    document.getElementById('receipt-datetime').innerText = apt.date + ' at ' + apt.time;
+    document.getElementById('receipt-amount').innerText = '₹' + apt.fee;
+    document.getElementById('receipt-status').innerText = apt.status;
+  }
+</script>
+</body>
+</html>

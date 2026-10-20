@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MediLink – Sign In</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body class="auth-body">
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="nav-brand" id="nav-brand">
+      <span class="brand-icon">🏥</span> MediLink
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="doctor-search.html" class="nav-link">Find Doctors</a>
+      <a href="register.html" class="btn btn-primary btn-sm">Sign Up</a>
+    </div>
+  </div>
+</nav>
+
+<div class="auth-container">
+  <div class="auth-card glass">
+    <div class="auth-header">
+      <div class="brand-icon large">🏥</div>
+      <h2 id="login-title">Welcome Back to MediLink</h2>
+      <p class="auth-subtitle">Access your appointments, prescriptions, and health records</p>
+    </div>
+
+    <!-- Alert / Error message container -->
+    <div id="alert-box" class="alert d-none" role="alert"></div>
+
+    <form id="login-form" novalidate>
+      <div class="form-group">
+        <label for="role-select">I am a</label>
+        <select id="role-select" class="form-control">
+          <option value="patient">Patient</option>
+          <option value="doctor">Doctor</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="email-input">Email Address</label>
+        <input type="email" id="email-input" class="form-control" placeholder="name@example.com" required autocomplete="email"/>
+        <div id="email-error" class="field-error"></div>
+      </div>
+
+      <div class="form-group">
+        <label for="password-input">Password</label>
+        <input type="password" id="password-input" class="form-control" placeholder="••••••••" required autocomplete="current-password"/>
+        <div id="password-error" class="field-error"></div>
+      </div>
+
+      <div class="form-actions">
+        <label class="remember-me">
+          <input type="checkbox" id="remember-me-chk"/> Remember me
+        </label>
+        <a href="#" class="forgot-link" id="forgot-link">Forgot Password?</a>
+      </div>
+
+      <button type="submit" id="login-btn" class="btn btn-primary btn-full">
+        Sign In to MediLink
+      </button>
+
+      <div class="quick-demo-logins">
+        <p class="quick-title">Quick Demo Logins:</p>
+        <div class="quick-buttons">
+          <button type="button" class="btn btn-ghost btn-sm" id="demo-patient-btn">Patient Demo</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="demo-doctor-btn">Doctor Demo</button>
+        </div>
+      </div>
+    </form>
+
+    <div class="auth-footer">
+      <p>Don't have an account? <a href="register.html" id="link-register">Create Account</a></p>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+  const form = document.getElementById('login-form');
+  const alertBox = document.getElementById('alert-box');
+  const emailInput = document.getElementById('email-input');
+  const passwordInput = document.getElementById('password-input');
+  const roleSelect = document.getElementById('role-select');
+  const emailError = document.getElementById('email-error');
+  const passwordError = document.getElementById('password-error');
+
+  document.getElementById('demo-patient-btn').addEventListener('click', () => {
+    emailInput.value = 'patient@demo.com';
+    passwordInput.value = 'password123';
+    roleSelect.value = 'patient';
+  });
+
+  document.getElementById('demo-doctor-btn').addEventListener('click', () => {
+    emailInput.value = 'doctor@demo.com';
+    passwordInput.value = 'password123';
+    roleSelect.value = 'doctor';
+  });
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    alertBox.className = 'alert d-none';
+    alertBox.innerText = '';
+    emailError.innerText = '';
+    passwordError.innerText = '';
+
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
+    const role = roleSelect.value;
+
+    let hasError = false;
+    if (!email) {
+      emailError.innerText = 'Email address is required.';
+      hasError = true;
+    } else if (!email.includes('@') || !email.includes('.')) {
+      emailError.innerText = 'Please enter a valid email address.';
+      hasError = true;
+    }
+
+    if (!password) {
+      passwordError.innerText = 'Password is required.';
+      hasError = true;
+    }
+
+    if (hasError) return;
+
+    const res = MediLink.loginUser(email, password, role);
+    if (!res.success) {
+      alertBox.className = 'alert alert-danger';
+      alertBox.innerText = res.message;
+      return;
+    }
+
+    alertBox.className = 'alert alert-success';
+    alertBox.innerText = 'Login successful! Redirecting...';
+    setTimeout(() => {
+      if (res.user.role === 'doctor') {
+        window.location.href = 'doctor-dashboard.html';
+      } else {
+        window.location.href = 'patient-dashboard.html';
+      }
+    }, 500);
+  });
+</script>
+</body>
+</html>

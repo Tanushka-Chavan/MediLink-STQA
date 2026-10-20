@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MediLink – Doctor Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body class="dashboard-body">
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="nav-brand" id="nav-brand">
+      <span class="brand-icon">🏥</span> MediLink <span class="badge badge-info">Doctor Portal</span>
+    </a>
+    <div class="nav-links">
+      <a href="doctor-dashboard.html" class="nav-link active">Patient Queue</a>
+      <button class="btn btn-outline btn-sm" id="doctor-logout-btn">Sign Out</button>
+    </div>
+  </div>
+</nav>
+
+<div class="container dashboard-container">
+  <div class="dashboard-header flex-between">
+    <div>
+      <h1 class="page-title" id="doctor-welcome-title">Dr. Rohan Mehta's Clinic</h1>
+      <p class="page-subtitle">Cardiology Department • City Heart Center, Mumbai</p>
+    </div>
+    <div class="badge badge-success available-pill">● Accepting Consultations</div>
+  </div>
+
+  <div id="doctor-alert" class="alert d-none"></div>
+
+  <!-- Stats Grid -->
+  <div class="stats-grid">
+    <div class="stat-card glass">
+      <div class="stat-icon">👥</div>
+      <div>
+        <div class="stat-value" id="doc-stat-queue">4</div>
+        <div class="stat-title">Patients Scheduled</div>
+      </div>
+    </div>
+    <div class="stat-card glass">
+      <div class="stat-icon">✅</div>
+      <div>
+        <div class="stat-value" id="doc-stat-completed">2</div>
+        <div class="stat-title">Completed Today</div>
+      </div>
+    </div>
+    <div class="stat-card glass">
+      <div class="stat-icon">💰</div>
+      <div>
+        <div class="stat-value" id="doc-stat-revenue">₹3,400</div>
+        <div class="stat-title">Today's Revenue</div>
+      </div>
+    </div>
+    <div class="stat-card glass">
+      <div class="stat-icon">⭐</div>
+      <div>
+        <div class="stat-value">4.9 / 5.0</div>
+        <div class="stat-title">Patient Rating</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Patient Queue Section -->
+  <div class="card glass dashboard-section">
+    <div class="section-top flex-between">
+      <h2>Upcoming Consultations</h2>
+      <button class="btn btn-ghost btn-sm" id="refresh-queue-btn">↻ Refresh</button>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table" id="queue-table">
+        <thead>
+          <tr>
+            <th>Token ID</th>
+            <th>Patient Name</th>
+            <th>Time Slot</th>
+            <th>Consultation Type</th>
+            <th>Symptoms / Notes</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="queue-tbody">
+          <!-- Dynamically populated -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+  document.getElementById('doctor-logout-btn').addEventListener('click', () => {
+    MediLink.logout();
+  });
+
+  const tbody = document.getElementById('queue-tbody');
+  const alertBox = document.getElementById('doctor-alert');
+
+  function renderQueue() {
+    const appointments = MediLink.getAppointments();
+    tbody.innerHTML = appointments.map(a => `
+      <tr id="doc-row-${a.id}">
+        <td><strong>${a.id}</strong></td>
+        <td>${a.patientName || 'John Doe'}</td>
+        <td>${a.date} at ${a.time}</td>
+        <td><span class="badge badge-info">${a.type || 'In-Person'}</span></td>
+        <td>${a.symptoms || 'Regular checkup'}</td>
+        <td><span class="badge badge-${a.status === 'Confirmed' ? 'warning' : a.status === 'Completed' ? 'success' : 'danger'}">${a.status}</span></td>
+        <td>
+          ${a.status === 'Confirmed' ? `
+            <button class="btn btn-primary btn-sm complete-btn" data-apt-id="${a.id}" id="complete-btn-${a.id}">Complete</button>
+          ` : `<span class="text-muted">Finished</span>`}
+        </td>
+      </tr>
+    `).join('');
+
+    document.querySelectorAll('.complete-btn').forEach(b => {
+      b.addEventListener('click', () => {
+        const id = b.getAttribute('data-apt-id');
+        const apts = MediLink.getAppointments();
+        const found = apts.find(a => a.id === id);
+        if (found) {
+          found.status = 'Completed';
+          localStorage.setItem('medilink_appointments', JSON.stringify(apts));
+          alertBox.className = 'alert alert-success';
+          alertBox.innerText = 'Consultation for ' + id + ' marked as Completed.';
+          renderQueue();
+        }
+      });
+    });
+  }
+
+  document.getElementById('refresh-queue-btn').addEventListener('click', renderQueue);
+  renderQueue();
+</script>
+</body>
+</html>

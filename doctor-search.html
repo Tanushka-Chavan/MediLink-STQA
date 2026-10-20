@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MediLink – Find Doctors</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="nav-brand" id="nav-brand">
+      <span class="brand-icon">🏥</span> MediLink
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="doctor-search.html" class="nav-link active">Find Doctors</a>
+      <a href="patient-dashboard.html" class="nav-link" id="nav-dashboard">My Appointments</a>
+      <a href="login.html" class="btn btn-outline btn-sm" id="nav-auth-btn">Login</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container search-page-container">
+  <div class="page-header text-center">
+    <h1 class="page-title">Find & Book Top Doctors</h1>
+    <p class="page-subtitle">Search from our verified network of medical specialists</p>
+  </div>
+
+  <!-- Search and Filter Bar -->
+  <div class="search-filter-card glass">
+    <div class="search-inputs-grid">
+      <div class="search-field">
+        <label for="search-input">Doctor Name or Keyword</label>
+        <input type="text" id="search-input" class="form-control" placeholder="e.g. Mehta, Heart, Apollo..."/>
+      </div>
+
+      <div class="filter-field">
+        <label for="specialty-filter">Specialty</label>
+        <select id="specialty-filter" class="form-control">
+          <option value="all">All Specialties</option>
+          <option value="Cardiology">Cardiology</option>
+          <option value="Dermatology">Dermatology</option>
+          <option value="Orthopedics">Orthopedics</option>
+          <option value="Pediatrics">Pediatrics</option>
+          <option value="Neurology">Neurology</option>
+          <option value="General Medicine">General Medicine</option>
+        </select>
+      </div>
+
+      <div class="filter-field">
+        <label for="city-filter">City</label>
+        <select id="city-filter" class="form-control">
+          <option value="all">All Cities</option>
+          <option value="Mumbai">Mumbai</option>
+          <option value="Pune">Pune</option>
+          <option value="Bangalore">Bangalore</option>
+          <option value="Delhi">Delhi</option>
+        </select>
+      </div>
+
+      <div class="filter-field">
+        <label for="sort-filter">Sort By</label>
+        <select id="sort-filter" class="form-control">
+          <option value="rating">Rating (Highest first)</option>
+          <option value="fee-asc">Fee (Low to High)</option>
+          <option value="fee-desc">Fee (High to Low)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="search-actions-row">
+      <button id="search-btn" class="btn btn-primary">Apply Filters</button>
+      <button id="reset-btn" class="btn btn-ghost">Reset Filters</button>
+      <span id="results-count" class="results-badge">6 Doctors Found</span>
+    </div>
+  </div>
+
+  <!-- Doctors List Container -->
+  <div id="doctors-grid" class="doctors-grid">
+    <!-- Populated dynamically via JS -->
+  </div>
+
+  <div id="no-doctors-msg" class="empty-state d-none">
+    <div class="empty-icon">🩺</div>
+    <h3>No Doctors Found</h3>
+    <p>Try adjusting your search filters to find available specialists.</p>
+  </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+  const searchInput = document.getElementById('search-input');
+  const specialtyFilter = document.getElementById('specialty-filter');
+  const cityFilter = document.getElementById('city-filter');
+  const sortFilter = document.getElementById('sort-filter');
+  const searchBtn = document.getElementById('search-btn');
+  const resetBtn = document.getElementById('reset-btn');
+  const doctorsGrid = document.getElementById('doctors-grid');
+  const noDoctorsMsg = document.getElementById('no-doctors-msg');
+  const resultsCount = document.getElementById('results-count');
+
+  // Check login state for nav button
+  const currentUser = MediLink.getCurrentUser();
+  if (currentUser) {
+    const navAuth = document.getElementById('nav-auth-btn');
+    if (navAuth) {
+      navAuth.innerText = 'Logout (' + currentUser.name.split(' ')[0] + ')';
+      navAuth.href = '#';
+      navAuth.addEventListener('click', (e) => {
+        e.preventDefault();
+        MediLink.logout();
+      });
+    }
+  }
+
+  function renderDoctors() {
+    let docs = MediLink.getDoctors();
+    const query = searchInput.value.toLowerCase().trim();
+    const specialty = specialtyFilter.value;
+    const city = cityFilter.value;
+    const sort = sortFilter.value;
+
+    if (query) {
+      docs = docs.filter(d =>
+        d.name.toLowerCase().includes(query) ||
+        d.specialty.toLowerCase().includes(query) ||
+        d.hospital.toLowerCase().includes(query)
+      );
+    }
+
+    if (specialty !== 'all') {
+      docs = docs.filter(d => d.specialty === specialty);
+    }
+
+    if (city !== 'all') {
+      docs = docs.filter(d => d.city === city);
+    }
+
+    if (sort === 'rating') {
+      docs.sort((a, b) => b.rating - a.rating);
+    } else if (sort === 'fee-asc') {
+      docs.sort((a, b) => a.fee - b.fee);
+    } else if (sort === 'fee-desc') {
+      docs.sort((a, b) => b.fee - a.fee);
+    }
+
+    resultsCount.innerText = docs.length + ' Doctors Found';
+
+    if (docs.length === 0) {
+      doctorsGrid.innerHTML = '';
+      noDoctorsMsg.classList.remove('d-none');
+      return;
+    }
+
+    noDoctorsMsg.classList.add('d-none');
+    doctorsGrid.innerHTML = docs.map(d => `
+      <div class="doctor-card glass" data-doctor-id="${d.id}">
+        <div class="doc-card-header">
+          <div class="doc-avatar-large">${d.avatar}</div>
+          <div class="doc-info">
+            <h3 class="doc-name">${d.name}</h3>
+            <span class="badge badge-specialty">${d.specialty}</span>
+            <p class="doc-hospital">🏥 ${d.hospital}, ${d.city}</p>
+            <p class="doc-exp">⏳ ${d.experience} experience</p>
+          </div>
+          <div class="doc-rating">
+            <span class="star-rating">★ ${d.rating}</span>
+          </div>
+        </div>
+
+        <div class="doc-card-body">
+          <div class="fee-row">
+            <span class="fee-label">Consultation Fee:</span>
+            <span class="fee-amount">₹${d.fee}</span>
+          </div>
+          <div class="slots-overview">
+            <span class="slots-label">Available Slots:</span>
+            <div class="slots-pill-group">
+              ${d.slots.map(s => `<span class="slot-pill">${s}</span>`).join('')}
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-card-actions">
+          <a href="book-appointment.html?doctorId=${d.id}" class="btn btn-primary btn-full book-doctor-btn" data-doc-id="${d.id}">
+            Book Appointment
+          </a>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  searchBtn.addEventListener('click', renderDoctors);
+  searchInput.addEventListener('keyup', (e) => {
+    if (e.key === 'Enter') renderDoctors();
+  });
+  specialtyFilter.addEventListener('change', renderDoctors);
+  cityFilter.addEventListener('change', renderDoctors);
+  sortFilter.addEventListener('change', renderDoctors);
+
+  resetBtn.addEventListener('click', () => {
+    searchInput.value = '';
+    specialtyFilter.value = 'all';
+    cityFilter.value = 'all';
+    sortFilter.value = 'rating';
+    renderDoctors();
+  });
+
+  // Initial render
+  renderDoctors();
+</script>
+</body>
+</html>
